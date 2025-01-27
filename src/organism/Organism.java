@@ -9,9 +9,6 @@ public abstract class Organism {
         this.weight = weight;
     }
 
-    public Organism() {
-    }
-
     public String getName() {
         return name;
     }

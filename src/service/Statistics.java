@@ -1,7 +1,5 @@
 package service;
 
-import organism.animals.harbivores.Goat;
-
 import java.util.HashMap;
 import java.util.Map;
 

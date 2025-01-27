@@ -1,36 +1,31 @@
 package organism.animals.predator;
 
-import interfaces.Direction;
 import map.Cell;
+import map.GameField;
 import organism.animals.Animal;
 
 public class Fox extends Predator{
-    public Fox() {
-        super("Fox", 8, 2, 30, 2);
-    }
-
-    @Override
-    public void act() {
-        super.act();
+    public Fox(int x, int y, GameField gameField) {
+        super("Fox", 8, 2, 30, 2, x, y, gameField);
     }
 
     @Override
     public Animal createOffspring() {
-        return new Fox();
+        return new Fox(this.x, this.y, this.gameField);
     }
 
     @Override
-    public void move() {
-        super.move();
+    public String move() {
+        return super.move();
     }
 
     @Override
-    public void eat(Cell currentCell) {
-        super.eat(currentCell);
+    public String eat(Cell currentCell) {
+       return super.eat(currentCell);
     }
 
     @Override
-    public void reproduce(Cell currentCell) {
-        super.reproduce(currentCell);
+    public String reproduce(Cell currentCell) {
+        return super.reproduce(currentCell);
     }
 }

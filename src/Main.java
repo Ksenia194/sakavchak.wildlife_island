@@ -1,19 +1,13 @@
 import map.GameField;
-import service.PrintStatistics;
 import service.Simulation;
 
 public class Main {
     public static void main(String[] args) {
-        int width = 100;
-        int height = 20;
-        int totalAnimals = 100;
 
-        GameField gameField = new GameField(width, height, totalAnimals);
-        PrintStatistics print = new PrintStatistics(gameField.getField());
+        GameField gameField = new GameField(100, 20, 100);
         Simulation simulation = new Simulation(gameField, 1000);
 
         simulation.start();
-        print.printStatistic();
 
         try {
             Thread.sleep(5000);

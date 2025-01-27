@@ -1,37 +1,32 @@
 package organism.animals.harbivores;
 
-import interfaces.Direction;
 import map.Cell;
+import map.GameField;
 import organism.animals.Animal;
 
 public class Horse extends Herbivor{
-    public Horse() {
-        super("Horse", 400, 60, 20, 4);
+    public Horse(int x, int y, GameField gameField) {
+        super("Horse", 400, 60, 20, 4, x, y, gameField);
     }
 
     @Override
-    public void act() {
-        super.act();
+    public String move() {
+        return super.move();
     }
 
     @Override
-    public void move() {
-        super.move();
+    public String eat(Cell currentCell) {
+        return super.eat(currentCell);
     }
 
     @Override
-    public void eat(Cell currentCell) {
-        super.eat(currentCell);
-    }
-
-    @Override
-    public void reproduce(Cell currentCell) {
-        super.reproduce(currentCell);
+    public String reproduce(Cell currentCell) {
+        return super.reproduce(currentCell);
     }
 
     @Override
     public Animal createOffspring() {
-        return new Horse();
+        return new Horse(this.x, this.y, this.gameField);
     }
 
 }

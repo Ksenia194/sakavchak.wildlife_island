@@ -1,38 +1,32 @@
 package organism.animals.harbivores;
 
-import interfaces.Direction;
 import map.Cell;
+import map.GameField;
 import organism.animals.Animal;
-import organism.plant.Plant;
 
 public class Rabbit extends Herbivor {
 
-    public Rabbit() {
-        super("Rabbit", 2, 0.45, 150, 2);
+    public Rabbit(int x, int y, GameField gameField) {
+        super("Rabbit", 2, 0.45, 150, 2, x, y, gameField);
     }
 
     @Override
-    public void act() {
-        super.act();
+    public String move() {
+        return super.move();
     }
 
     @Override
-    public void move() {
-        super.move();
+    public String eat(Cell currentCell) {
+        return super.eat(currentCell);
     }
 
     @Override
-    public void eat(Cell currentCell) {
-        super.eat(currentCell);
-    }
-
-    @Override
-    public void reproduce(Cell currentCell) {
-        super.reproduce(currentCell);
+    public String reproduce(Cell currentCell) {
+        return super.reproduce(currentCell);
     }
 
     @Override
     public Animal createOffspring() {
-        return new Rabbit();
+        return new Rabbit(this.x, this.y, this.gameField);
     }
 }

@@ -1,37 +1,29 @@
 package map;
 
 import interfaces.AnimalType;
-import organism.animals.Animal;
 import organism.animals.harbivores.*;
 import organism.animals.predator.*;
 import organism.plant.Grass;
-import organism.plant.Plant;
-
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class GameField {
 
     private final int height;
     private final int width;
     private Cell[][] field;
-    private ExecutorService executor;
+    private static Random random = new Random();
 
-    public GameField(int height, int width, int totalAnimals) {
+    public GameField(int height, int width, int totalAnimal) {
         this.height = height;
         this.width = width;
         field = new Cell[width][height];
         initializeField();
-        int threadCount = Math.min(totalAnimals, Runtime.getRuntime().availableProcessors());
-        executor = Executors.newFixedThreadPool(threadCount);
     }
 
-    private void initializeField() {
-        Random random = new Random();
+    public void initializeField() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                field[i][j] = new Cell();
+                field[i][j] = new Cell(i, j);
 
                 if (random.nextDouble() < 0.5) {
                     field[i][j].setPlant(new Grass());
@@ -47,80 +39,83 @@ public class GameField {
     }
 
     private void addAnimalToCell(AnimalType animalType, Cell cell) {
+        int x = random.nextInt(width);
+        int y = random.nextInt(height);
+
         switch (animalType) {
             case WOLF:
-                if (cell.canAddAnimal(new Wolf())) {
-                    cell.addAnimal(new Wolf());
+                if (cell.canAddAnimal(new Wolf(x, y, this))) {
+                    cell.addAnimal(new Wolf(x, y, this));
                 }
                 break;
             case PYTHON:
-                if (cell.canAddAnimal(new Python())) {
-                    cell.addAnimal(new Python());
+                if (cell.canAddAnimal(new Python(x, y, this))) {
+                    cell.addAnimal(new Python(x, y, this));
                 }
                 break;
             case FOX:
-                if (cell.canAddAnimal(new Fox())) {
-                    cell.addAnimal(new Fox());
+                if (cell.canAddAnimal(new Fox(x, y, this))) {
+                    cell.addAnimal(new Fox(x, y, this));
                 }
                 break;
             case BEAR:
-                if (cell.canAddAnimal(new Bear())) {
-                    cell.addAnimal(new Bear());
+                if (cell.canAddAnimal(new Bear(x, y, this))) {
+                    cell.addAnimal(new Bear(x, y, this));
                 }
                 break;
             case EAGLE:
-                if (cell.canAddAnimal(new Eagle())) {
-                    cell.addAnimal(new Eagle());
+                if (cell.canAddAnimal(new Eagle(x, y, this))) {
+                    cell.addAnimal(new Eagle(x, y, this));
                 }
                 break;
             case HORSE:
-                if (cell.canAddAnimal(new Horse())) {
-                    cell.addAnimal(new Horse());
+                if (cell.canAddAnimal(new Horse(x, y, this))) {
+                    cell.addAnimal(new Horse(x, y, this));
                 }
                 break;
             case DEER:
-                if (cell.canAddAnimal(new Deer())) {
-                    cell.addAnimal(new Deer());
+                if (cell.canAddAnimal(new Deer(x, y, this))) {
+                    cell.addAnimal(new Deer(x, y, this));
                 }
                 break;
             case RABBIT:
-                if (cell.canAddAnimal(new Rabbit())) {
-                    cell.addAnimal(new Rabbit());
+                if (cell.canAddAnimal(new Rabbit(x, y, this))) {
+                    cell.addAnimal(new Rabbit(x, y, this));
                 }
                 break;
             case MOUSE:
-                if (cell.canAddAnimal(new Mouse())) {
-                    cell.addAnimal(new Mouse());
+                if (cell.canAddAnimal(new Mouse(x, y, this))) {
+                    cell.addAnimal(new Mouse(x, y, this));
                 }
                 break;
             case GOAT:
-                if (cell.canAddAnimal(new Goat())) {
-                    cell.addAnimal(new Goat());
+                if (cell.canAddAnimal(new Goat(x, y, this))) {
+                    cell.addAnimal(new Goat(x, y, this));
                 }
                 break;
             case SHEEP:
-                if (cell.canAddAnimal(new Sheep())) {
-                    cell.addAnimal(new Sheep());
+                if (cell.canAddAnimal(new Sheep(x, y, this))) {
+                    cell.addAnimal(new Sheep(x, y, this));
                 }
                 break;
             case WILD_BOAR:
-                if (cell.canAddAnimal(new WildBoar())) {
-                    cell.addAnimal(new WildBoar());
+                if (cell.canAddAnimal(new WildBoar(x, y, this))) {
+                    cell.addAnimal(new WildBoar(x, y, this));
                 }
                 break;
             case BUFFALO:
-                if (cell.canAddAnimal(new Buffalo())) {
-                    cell.addAnimal(new Buffalo());
+                if (cell.canAddAnimal(new Buffalo(x, y, this))) {
+                    cell.addAnimal(new Buffalo(x, y, this));
                 }
                 break;
             case DUCK:
-                if (cell.canAddAnimal(new Duck())) {
-                    cell.addAnimal(new Duck());
+                if (cell.canAddAnimal(new Duck(x, y, this))) {
+                    cell.addAnimal(new Duck(x, y, this));
                 }
                 break;
             case CATERPILLAR:
-                if (cell.canAddAnimal(new Caterpillar())) {
-                    cell.addAnimal(new Caterpillar());
+                if (cell.canAddAnimal(new Caterpillar(x, y, this))) {
+                    cell.addAnimal(new Caterpillar(x, y, this));
                 }
                 break;
             default:
@@ -139,28 +134,6 @@ public class GameField {
     public Cell[][] getField() {
         return field;
     }
-
-    //    public void printStatistics() {
-//        int totalAnimals = 0;
-//        int totalPlants = 0;
-//
-//        for (int i = 0; i < width; i++) {
-//            for (int j = 0; j < height; j++) {
-//                int animalsCount = field[i][j].getAnimals().size();
-//                int plantsCount = field[i][j].getPlantCount();
-//
-//                totalAnimals += animalsCount;
-//                totalPlants += plantsCount;
-//
-//                System.out.println("Клітинка (" + i + "," + j + "): " +
-//                        animalsCount + " тварини, " +
-//                        plantsCount + " рослини.");
-//            }
-//        }
-//
-//        System.out.println("Всі тварини: " + totalAnimals);
-//        System.out.println("Всі рослини: " + totalPlants);
-//    }
 
     private AnimalType getAnimalType(double randomValue) {
         if (randomValue < 0.05) {
@@ -204,13 +177,5 @@ public class GameField {
 
     public int getWidth() {
         return width;
-    }
-
-    public void growPlants() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                field[i][j].grownPlant();
-            }
-        }
     }
 }

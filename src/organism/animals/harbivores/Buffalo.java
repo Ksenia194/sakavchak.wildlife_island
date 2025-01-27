@@ -1,38 +1,32 @@
 package organism.animals.harbivores;
 
-import interfaces.Direction;
 import map.Cell;
+import map.GameField;
 import organism.animals.Animal;
-import organism.plant.Plant;
 
 public class Buffalo extends Herbivor {
 
-    public Buffalo() {
-        super("Buffalo", 700, 100, 10, 3);
+    public Buffalo(int x, int y, GameField gameField) {
+        super("Buffalo", 700, 100, 10, 3, x, y, gameField);
     }
 
     @Override
-    public void act() {
-        super.act();
+    public String move() {
+        return super.move();
     }
 
     @Override
-    public void move() {
-        super.move();
+    public String eat(Cell currentCell) {
+        return super.eat(currentCell);
     }
 
     @Override
-    public void eat(Cell currentCell) {
-        super.eat(currentCell);
-    }
-
-    @Override
-    public void reproduce(Cell currentCell) {
-        super.reproduce(currentCell);
+    public String reproduce(Cell currentCell) {
+        return super.reproduce(currentCell);
     }
 
     @Override
     public Animal createOffspring() {
-        return new Buffalo();
+        return new Buffalo(this.x, this.y, this.gameField);
     }
 }

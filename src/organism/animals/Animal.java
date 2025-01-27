@@ -4,11 +4,11 @@ import interfaces.*;
 import map.Cell;
 import map.GameField;
 import organism.Organism;
-
+import organism.plant.Grass;
 
 
 public abstract class Animal extends Organism implements Move, Reproduce, Eat, Die {
-    GameField gameField;
+    protected GameField gameField;
     protected double foodNeeded;
     protected int maxAnimalOnCell;
     protected int movementSpeed;
@@ -16,15 +16,17 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
     protected int age;
     protected int x;
     protected int y;
-    private Cell currentCell;
 
-    public Animal(String name, double weight, double foodNeeded, int maxAnimalOnCell, int movementSpeed) {
+    public Animal(String name, double weight, double foodNeeded, int maxAnimalOnCell, int movementSpeed, int x, int y, GameField gameField) {
         super(name, weight);
         this.foodNeeded = foodNeeded;
         this.maxAnimalOnCell = maxAnimalOnCell;
         this.movementSpeed = movementSpeed;
         this.health = 100.0;
         this.age = 0;
+        this.x = x;
+        this.y = y;
+        this.gameField = gameField;
     }
 
     public double getFoodNeeded() {
@@ -35,12 +37,8 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
         return maxAnimalOnCell;
     }
 
-    public int getMovementSpeed() {
-        return movementSpeed;
-    }
 
-
-    public void move() {
+    public String move() {
         Direction direction = chooseDirection();
         int newX = this.x + direction.getX() * movementSpeed;
         int newY = this.y + direction.getY() * movementSpeed;
@@ -49,28 +47,31 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
             this.x = newX;
             this.y = newY;
             gameField.getCell(x, y).addAnimal(this);
-            System.out.println(name + " переміщено в (" + x + ", " + y + ")");
+            return name + " переміщено в (" + x + ", " + y + ")";
         } else {
-            System.out.println(name + " не можна переміщатися за межі поля!");
+            return name + " не можна переміщатися за межі поля!";
         }
     }
 
-    public void eat(Cell currentCell) {
-        System.out.println(name + " їсть в клітинці (" + x + ", " + y + ")");
+    public String eat(Cell currentCell) {
+        return null;
+//        Cell cell = gameField.getCell(x, y);
+//        Grass grass = (Grass) cell.getPlant();
+//        if (grass != null && grass.getTotalWeight() > 0) {
+//            grass.consume();
+//            return name + " їсть в клітинці (" + x + ", " + y + ")";
+//        } else {
+//            return name + " не знайшов рослин на клітинці.";
+//        }
     }
 
-    public void reproduce(Cell currentCell) {
-        System.out.println(name + " розмножується в клітинці (" + x + ", " + y + ")");
-        if (canReproduce() && hasMate()) {
+    public String reproduce(Cell currentCell) {
+        if (hasMate(currentCell)) {
             Animal offspring = createOffspring();
-            if (currentCell.canAddAnimal(offspring)) {
-                currentCell.addAnimal(offspring);
-                System.out.println(name + " розмножено. Нороджується новий " + offspring.getName() + " в клітинці (" + x + ", " + y + ")");
-            } else {
-                System.out.println(name + " не може розмножуватися, тому що клітина заповнена");
-            }
+            currentCell.addAnimal(offspring);
+            return name + " розмножено. Нороджується новий " + offspring.getName() + " в клітинці (" + x + ", " + y + ")";
         } else {
-            System.out.println(name + " не може розмножитися, оскільки немає пари.");
+            return name + " не може розмножитися, оскільки немає пари.";
         }
     }
 
@@ -79,7 +80,7 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
         return directions[(int) (Math.random() * directions.length)];
     }
 
-    protected boolean hasMate() {
+    protected boolean hasMate(Cell currentCell) {
         long count = currentCell.getAnimals().stream()
                 .filter(animal -> animal.getClass().equals(this.getClass()))
                 .count();
@@ -115,12 +116,12 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
         }
     }
 
-    public boolean isDead() {
-        return this.health <= 0 || this.age > 10;
+    public void setGameField(GameField gameField) {
+        this.gameField = gameField;
     }
 
-    public boolean canReproduce() {
-        return this.age > 2 && this.health > 50;
+    public boolean isDead() {
+        return this.health <= 0 || this.age > 10;
     }
 
     public boolean isAlive() {
