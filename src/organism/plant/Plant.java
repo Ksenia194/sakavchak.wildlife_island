@@ -5,7 +5,7 @@ import organism.Organism;
 public class Plant extends Organism {
     private String type;
     private double grownRace;
-    private static double currentSize;
+    private static int currentSize;
 
     public Plant(String type, int growthRace) {
         super(type, growthRace);

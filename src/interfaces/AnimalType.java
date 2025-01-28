@@ -10,7 +10,7 @@ public enum AnimalType {
     MOUSE,
     RABBIT,
     SHEEP,
-    WILD_BOAR,
+    WILDBOAR,
     BEAR,
     EAGLE,
     FOX,

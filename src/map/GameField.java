@@ -33,6 +33,7 @@ public class GameField {
                 AnimalType animalType = getAnimalType(randomValue);
                 if (animalType != null) {
                     addAnimalToCell(animalType, field[i][j]);
+                    System.out.println("Додано " + animalType + " у комірку (" + i + ", " + j + ")");
                 }
             }
         }
@@ -98,7 +99,7 @@ public class GameField {
                     cell.addAnimal(new Sheep(x, y, this));
                 }
                 break;
-            case WILD_BOAR:
+            case WILDBOAR:
                 if (cell.canAddAnimal(new WildBoar(x, y, this))) {
                     cell.addAnimal(new WildBoar(x, y, this));
                 }
@@ -159,7 +160,7 @@ public class GameField {
         } else if (randomValue < 0.55) {
             return AnimalType.SHEEP;
         } else if (randomValue < 0.60) {
-            return AnimalType.WILD_BOAR;
+            return AnimalType.WILDBOAR;
         } else if (randomValue < 0.65) {
             return AnimalType.BUFFALO;
         } else if (randomValue < 0.70) {

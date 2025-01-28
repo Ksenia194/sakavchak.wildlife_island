@@ -27,10 +27,11 @@ public abstract class Herbivor extends Animal {
             Plant plant = currentCell.getPlant();
             if (plant != null) {
                 int probability = Statistics.getPlantEatingProbability(this.getClass().getSimpleName());
+                System.out.println(this.name + " намагається з'їсти рослину з ймовірністю: " + probability + "%");
                 int randomValue = ThreadLocalRandom.current().nextInt(100);
                 if (randomValue < probability) {
                     currentCell.animalEatPlant(this);
-                    this.foodNeeded -= foodNeeded;
+                    this.foodNeeded -= plant.getCurrentSize();
                     this.weight += plant.getCurrentSize();
                     System.out.println(this.name + " з'їв " + plant.getType());
                 } else {
@@ -42,31 +43,6 @@ public abstract class Herbivor extends Animal {
         }
         return null;
     }
-
-//    @Override
-//    public String eat(Cell currentCell) {
-//        synchronized (currentCell) {
-//            Plant plant = currentCell.getPlant();
-//            if (plant != null) {
-//                AnimalType herbivorType = AnimalType.valueOf(this.getClass().getSimpleName().toUpperCase());
-//                FoodType plantType = FoodType.valueOf(plant.getClass().getSimpleName().toUpperCase());
-//                    int probability = Statistics.getEatingProbability(herbivorType, plantType);
-//                    int randomValue = ThreadLocalRandom.current().nextInt(100);
-//                    if (randomValue < probability) {
-//                        currentCell.animalEatPlant(this);
-//                        this.foodNeeded -= foodNeeded;
-//                        this.weight += plant.getCurrentSize();
-//                        System.out.println(this.name + " з'їв " + plant.getType());
-//                    } else {
-//                        System.out.println(this.name + " не знайшов їстівних рослин.");
-//                    }
-//            } else{
-//                System.out.println(this.name + " не знайшов рослин на клітинці.");
-//            }
-//        }
-//        return null;
-//    }
-
 
     @Override
     public void age() {

@@ -4,7 +4,10 @@ import interfaces.*;
 import map.Cell;
 import map.GameField;
 import organism.Organism;
+import organism.animals.harbivores.Herbivor;
 import organism.plant.Grass;
+
+import java.util.List;
 
 
 public abstract class Animal extends Organism implements Move, Reproduce, Eat, Die {
@@ -46,7 +49,9 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
             gameField.getCell(x, y).removeAnimal(this);
             this.x = newX;
             this.y = newY;
-            gameField.getCell(x, y).addAnimal(this);
+            Cell newCell = gameField.getCell(x, y);
+            newCell.addAnimal(this);
+            //gameField.getCell(x, y).addAnimal(this);
             return name + " переміщено в (" + x + ", " + y + ")";
         } else {
             return name + " не можна переміщатися за межі поля!";
@@ -55,14 +60,6 @@ public abstract class Animal extends Organism implements Move, Reproduce, Eat, D
 
     public String eat(Cell currentCell) {
         return null;
-//        Cell cell = gameField.getCell(x, y);
-//        Grass grass = (Grass) cell.getPlant();
-//        if (grass != null && grass.getTotalWeight() > 0) {
-//            grass.consume();
-//            return name + " їсть в клітинці (" + x + ", " + y + ")";
-//        } else {
-//            return name + " не знайшов рослин на клітинці.";
-//        }
     }
 
     public String reproduce(Cell currentCell) {

@@ -26,52 +26,48 @@ public abstract class Predator extends Animal {
     public String eat(Cell currentCell) {
         synchronized (currentCell) {
             List<Animal> animals = currentCell.getAnimals();
-            Random random = new Random();
-            for (Animal animal : animals) {
-                if (animal instanceof Herbivor && this.weight < foodNeeded) {
-                    int probability = Statistics.getEatingProbability(this.getClass().getSimpleName(), animal.getClass().getSimpleName());
-                    if (random.nextInt(100) < probability) {
-                        animals.remove(animal);
-                        this.weight += animal.getWeight();
-                        System.out.println(this.name + " eaten " + animal.getName());
+            System.out.println(this.name + " намагається знайти жертву серед " + animals.size() + " тварин.");
 
-                        if (this.weight >= foodNeeded) {
-                            System.out.println(this.name + " ate his fill.");
-                            break;
-                        }
-                    }
+            Random random = new Random();
+            boolean eaten = false;
+
+            for (Animal animal : animals) {
+                System.out.println("Знайдено тварину: " + animal.getName() + ", тип: " + animal.getClass().getSimpleName());
+            }
+            Animal preyToEat = null;
+            for (Animal animal : animals) {
+                if (animal instanceof Herbivor && !animal.equals(this)) {
+                    preyToEat = animal;
+                    break;
                 }
+            }
+
+            if (preyToEat == null) {
+                System.out.println(this.name + " не знайшов травоїдних тварин на клітинці.");
+                return null;
+            }
+
+            System.out.println(this.name + " намагається з'їсти " + preyToEat.getName());
+
+            int probability = Statistics.getEatingProbability(this.getClass().getSimpleName(), preyToEat.getClass().getSimpleName());
+            int randomValue = random.nextInt(100);
+            System.out.println(this.name + " намагається з'їсти з ймовірністю: " + probability + "% (випадкове значення: " + randomValue + ")");
+
+            if (randomValue < probability) {
+                currentCell.removeAnimal(preyToEat);
+                this.weight += preyToEat.getWeight();
+                System.out.println(this.name + " з'їв " + preyToEat.getName());
+                eaten = true;
+            } else {
+                System.out.println(this.name + " не зміг з'їсти " + preyToEat.getName());
+            }
+
+            if (!eaten) {
+                System.out.println(this.name + " не знайшов жертву або не зміг з'їсти жодну.");
             }
         }
         return null;
     }
-
-//    @Override
-//    public String eat(Cell currentCell) {
-//        synchronized (currentCell) {
-//            List<Animal> animals = currentCell.getAnimals();
-//            Random random = new Random();
-//            for (Animal animal : animals) {
-//                if (animal instanceof Herbivor && this.weight < foodNeeded) {
-//                    AnimalType predatorType = AnimalType.valueOf(this.getClass().getSimpleName().toUpperCase());
-//                    FoodType preyType = FoodType.valueOf(animal.getClass().getSimpleName().toUpperCase());
-//                    int probability = Statistics.getEatingProbability(predatorType, preyType);
-//                    if (random.nextInt(100) < probability) {
-//                        animals.remove(animal);
-//                        this.weight += animal.getWeight();
-//                        System.out.println(this.name + " з'їдено " + animal.getName());
-//
-//                        if (this.weight >= foodNeeded) {
-//                            System.out.println(this.name + " наївся.");
-//                            break;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
 
     @Override
     public void age() {

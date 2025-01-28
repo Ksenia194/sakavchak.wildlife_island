@@ -37,19 +37,19 @@ public class PrintStatistics {
             for (int j = 0; j < cells[i].length; j++) {
                 Cell cell = cells[i][j];
                 if (!cell.getAnimals().isEmpty() || cell.getPlant().getCurrentSize() > 0) {
-                    System.out.println("Локація (" + i + ", " + j + "): " + getAnimalStatistics() + ", Рослини: " + cell.getPlant().getCurrentSize());
+                    String animalStats = cell.getAnimals().stream()
+                            .collect(Collectors.groupingBy(
+                                    animal -> animal.getClass().getSimpleName(),
+                                    Collectors.counting()
+                            ))
+                            .entrySet().stream()
+                            .map(e -> e.getKey() + ": " + e.getValue())
+                            .collect(Collectors.joining(", "));
+
+                    System.out.println("Локація (" + i + ", " + j + "): " + animalStats + ", Рослини: " + cell.getPlant().getCurrentSize());
                 }
             }
         }
-    }
-
-    public String getAnimalStatistics() {
-        Map<String, Integer> animalCounts = new HashMap<>();
-        for (Animal animal : animals) {
-            animalCounts.put(animal.getClass().getSimpleName(),
-                    animalCounts.getOrDefault(animal.getClass().getSimpleName(), 0) + 1);
-        }
-        return animalCounts.entrySet().stream().map(e -> e.getKey() + ": " + e.getValue()).collect(Collectors.joining(", "));
     }
 
     public void printFeeding(List<String> feedingLog) {
@@ -83,32 +83,34 @@ public class PrintStatistics {
     public void printSummaryStatistics(int step) {
         System.out.println("\nЗведена статика за " + step + " крок");
         System.out.println("Кількісль тварин");
+        Map<AnimalType, Integer> animalCounts = getAnimalCounts();
         for (AnimalType animalType : AnimalType.values()) {
-            System.out.println("- " + animalType + ": " + getAnimalCount(animalType));
+            System.out.println("- " + animalType + ": " + animalCounts.getOrDefault(animalType, 0));
         }
         System.out.println("Кількість рослин: " + totalGrassCount());
     }
 
-//    private List<AnimalType> getAnimalTypes() {
-//        Map<AnimalType, Integer> animalCounts = new HashMap<>();
-//        for (int i = 0; i < cells.length; i++) {
-//            for (int j = 0; j < cells[i].length; j++) {
-//                for (Animal animal : cells[i][j].getAnimals()) {
-//                    AnimalType animalType = AnimalType.valueOf(animal.getClass().getSimpleName().toUpperCase());
-//                    animalCounts.put(animalType, animalCounts.getOrDefault(animalType, 0) + 1);
-//                }
-//            }
-//        }
-//        return new ArrayList<>(animalCounts.keySet());
-//    }
-
-    private int getAnimalCount(AnimalType animalType) {
-        return (int) Arrays.stream(cells)
+    private Map<AnimalType, Integer> getAnimalCounts() {
+        Map<AnimalType, Integer> counts = Arrays.stream(cells)
                 .flatMap(Arrays::stream)
                 .flatMap(cell -> cell.getAnimals().stream())
-                .filter(animal -> AnimalType.valueOf(animal.getClass().getSimpleName().toUpperCase()) == animalType)
-                .count();
+                .collect(Collectors.groupingBy(
+                        animal -> AnimalType.valueOf(animal.getClass().getSimpleName().toUpperCase()),
+                        Collectors.summingInt(e -> 1)
+                ));
+
+        // Логування результатів
+        System.out.println("Поточний підрахунок тварин: " + counts);
+        return counts;
     }
+
+//    private int getAnimalCount(AnimalType animalType) {
+//        return (int) Arrays.stream(cells)
+//                .flatMap(Arrays::stream)
+//                .flatMap(cell -> cell.getAnimals().stream())
+//                .filter(animal -> AnimalType.valueOf(animal.getClass().getSimpleName().toUpperCase()) == animalType)
+//                .count();
+//    }
 
     private int totalGrassCount() {
         return Arrays.stream(cells)

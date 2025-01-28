@@ -72,13 +72,7 @@ public class Statistics {
         return eatingProbabilities.getOrDefault(predator + "-" + prey, 0);
     }
 
-    private static void addProbability(String predator, String prey, int probability) {
-        if (probability > 0) {
-            eatingProbabilities.put(predator + "-" + prey, probability);
-        }
-    }
-
     public static int getPlantEatingProbability(String herbivore) {
-        return eatingProbabilities.getOrDefault(herbivore + "-Plant", 0);
+        return eatingProbabilities.getOrDefault(herbivore + "-Grass", 0);
     }
 }

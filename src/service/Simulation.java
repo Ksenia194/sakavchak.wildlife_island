@@ -66,6 +66,8 @@ public class Simulation {
 
                 step++;
 
+                clearLogs();
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -120,6 +122,7 @@ public class Simulation {
                     String eatingResult = animal.eat(currentCell);
                     if (eatingResult != null && !eatingResult.isEmpty()) {
                         feedingLog.add(eatingResult);
+                        System.out.println("Лог харчування: " + eatingResult);
                     }
                     String reproductionResult = animal.reproduce(currentCell);
                     if (reproductionResult != null && !reproductionResult.isEmpty()) {
@@ -160,4 +163,13 @@ public class Simulation {
             }
         }
     }
+
+    public void clearLogs() {
+        feedingLog.clear();
+        movementLog.clear();
+        reproductionLog.clear();
+        plantGrowthLog.clear();
+        System.out.println("Логи очищено.");
+    }
+
 }

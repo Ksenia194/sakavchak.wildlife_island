@@ -78,4 +78,12 @@ public class Cell {
         }
         return "";
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
